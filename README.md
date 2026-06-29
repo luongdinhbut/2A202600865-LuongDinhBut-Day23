@@ -42,13 +42,15 @@ A helper is provided in `src/langgraph_agent_lab/llm.py` — it reads your API k
 
 ```bash
 # Install your preferred LLM provider
-pip install langchain-openai    # for OpenAI
+pip install langchain-openai    # for Fireworks/OpenAI-compatible APIs or OpenAI
+# OR
+pip install langchain-google-genai  # for Gemini
 # OR
 pip install langchain-anthropic  # for Anthropic
 
 # Configure .env
 cp .env.example .env
-# Edit .env and set OPENAI_API_KEY or ANTHROPIC_API_KEY
+# Edit .env and set FIREWORKS_API_KEY, GEMINI_API_KEY, OPENAI_API_KEY, or ANTHROPIC_API_KEY
 ```
 
 ---
@@ -124,13 +126,13 @@ The grading script will also test with scenarios you haven't seen.
 # Option A: conda
 conda activate ai-lab
 pip install -e '.[dev]'
-pip install langchain-openai  # or langchain-anthropic
+pip install -e '.[fireworks]'  # or .[google], .[openai], .[anthropic]
 
 # Option B: venv
 python -m venv .venv
 source .venv/bin/activate
 pip install -e '.[dev]'
-pip install langchain-openai  # or langchain-anthropic
+pip install -e '.[fireworks]'  # or .[google], .[openai], .[anthropic]
 
 # Configure LLM
 cp .env.example .env
@@ -243,4 +245,4 @@ Pick one or more:
 
 5. **SqliteSaver API**: In `langgraph-checkpoint-sqlite` 3.x, use `SqliteSaver(conn=sqlite3.connect(...))` not `SqliteSaver.from_conn_string()`.
 
-6. **API key not set**: If you get "No LLM API key found", check your `.env` file and make sure it's loaded (use `python-dotenv` or export manually).
+6. **API key not set**: If you get "No LLM API key found", check your `.env` file and make sure it's loaded (use `python-dotenv` or export manually). For Fireworks DeepSeek Pro, set `FIREWORKS_API_KEY` and optionally `LLM_MODEL=accounts/fireworks/models/deepseek-v4-pro`.

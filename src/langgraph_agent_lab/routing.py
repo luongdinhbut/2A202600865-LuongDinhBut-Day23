@@ -6,7 +6,7 @@ These strings MUST match node names registered in graph.py.
 
 from __future__ import annotations
 
-from .state import AgentState
+from .state import AgentState, Route
 
 
 def route_after_classify(state: AgentState) -> str:
@@ -22,7 +22,13 @@ def route_after_classify(state: AgentState) -> str:
 
     Hint: use a dict mapping for clean implementation.
     """
-    raise NotImplementedError("TODO(student): implement route mapping after classify")
+    return {
+        Route.SIMPLE.value: "answer",
+        Route.TOOL.value: "tool",
+        Route.MISSING_INFO.value: "clarify",
+        Route.RISKY.value: "risky_action",
+        Route.ERROR.value: "retry",
+    }.get(str(state.get("route", "")), "answer")
 
 
 def route_after_evaluate(state: AgentState) -> str:
@@ -34,7 +40,9 @@ def route_after_evaluate(state: AgentState) -> str:
     - If evaluation_result == "needs_retry" → "retry"
     - Otherwise → "answer"
     """
-    raise NotImplementedError("TODO(student): implement evaluate routing for retry loop")
+    if state.get("evaluation_result") == "needs_retry":
+        return "retry"
+    return "answer"
 
 
 def route_after_retry(state: AgentState) -> str:
@@ -45,7 +53,11 @@ def route_after_retry(state: AgentState) -> str:
     - If attempt < max_attempts → "tool" (try again)
     - If attempt >= max_attempts → "dead_letter" (give up, escalate)
     """
-    raise NotImplementedError("TODO(student): implement bounded retry routing")
+    attempt = int(state.get("attempt", 0) or 0)
+    max_attempts = int(state.get("max_attempts", 3) or 3)
+    if attempt < max_attempts:
+        return "tool"
+    return "dead_letter"
 
 
 def route_after_approval(state: AgentState) -> str:
@@ -54,4 +66,7 @@ def route_after_approval(state: AgentState) -> str:
     - If approved → "tool" (proceed with risky action)
     - If rejected → "clarify" (ask user for alternative)
     """
-    raise NotImplementedError("TODO(student): implement approval routing")
+    approval = state.get("approval") or {}
+    if bool(approval.get("approved", False)):
+        return "tool"
+    return "clarify"

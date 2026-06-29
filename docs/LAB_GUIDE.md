@@ -26,7 +26,7 @@ route (max retry)  -> retry -> dead_letter -> finalize -> END
    - `approval` — needed for HITL approval decisions
    - Decide which new fields should be append-only (`Annotated[list, add]`) vs overwrite
 
-2. **`llm.py`**: Review the LLM helper. Set up your `.env` with `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`. Install `pip install langchain-openai` or `pip install langchain-anthropic`.
+2. **`llm.py`**: Review the LLM helper. Set up your `.env` with `FIREWORKS_API_KEY`, `GEMINI_API_KEY`, `OPENAI_API_KEY`, or `ANTHROPIC_API_KEY`. For Fireworks DeepSeek Pro, install `pip install -e '.[fireworks]'` or `pip install langchain-openai`, then set `LLM_MODEL=accounts/fireworks/models/deepseek-v4-pro`.
 
 3. **`nodes.py`**: Implement all node functions. Key requirements:
    - `classify_node`: **MUST use LLM** with structured output for intent classification

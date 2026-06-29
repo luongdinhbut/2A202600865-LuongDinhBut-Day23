@@ -14,6 +14,7 @@ dependencies = [
   "rich>=13.7",
   "typer>=0.12",
   "langgraph>=0.3.0",
+  "python-dotenv>=1.0",
 ]
 
 [project.optional-dependencies]
@@ -24,6 +25,7 @@ dev = [
   "mypy>=1.10",
 ]
 google = ["langchain-google-genai>=2.1.0"]
+fireworks = ["langchain-openai>=0.3.0"]
 openai = ["langchain-openai>=0.3.0"]
 anthropic = ["langchain-anthropic>=0.3.0"]
 sqlite = ["langgraph-checkpoint-sqlite>=2.0"]
@@ -41,7 +43,13 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "N", "ANN"]
-ignore = ["ANN101", "ANN102"]
+ignore = ["ANN401"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["ANN", "E402", "E501", "F401"]
+
+[tool.mypy]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 minversion = "8.0"
